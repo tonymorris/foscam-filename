@@ -52,6 +52,7 @@ library
                     Data.Foscam.File.Date
                     Data.Foscam.File.DeviceId
                     Data.Foscam.File.DeviceIdCharacter
+                    Data.Foscam.File.Internal
                     Data.Foscam.File.Filename
                     Data.Foscam.File.ImageId
                     Data.Foscam.File.Time
