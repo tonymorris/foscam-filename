@@ -22,6 +22,7 @@ import Data.Foscam.File.DeviceId(AsDeviceId(_DeviceId), DeviceId, deviceId)
 import Data.Foscam.File.ImageId(AsImageId(_ImageId), ImageId, imageId)
 import Data.Foscam.File.Time(AsTime(_Time), Time, time)
 import Data.Functor(Functor)
+import Data.Ord(Ord)
 import Text.Parser.Char(CharParsing, char, string)
 import Text.Parser.Combinators((<?>))
 import Prelude(Show)
@@ -37,7 +38,7 @@ data Filename =
     Date
     Time
     ImageId
-  deriving (Eq, Show)
+  deriving (Eq, Ord, Show)
 
 class AsFilename p f s where
   _Filename ::
