@@ -1,17 +1,20 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE GADTs #-}
 
 module Data.Foscam.File.DeviceId(
   DeviceId(..)
 , AsDeviceId(..)
 , deviceId
+, getDeviceIdCharacters
 ) where
 
 import Control.Applicative(Applicative((<*>)), (<$>))
-import Control.Category(id)
-import Control.Lens(Optic', Choice, prism', (^?), ( # ))
+import Control.Category(id, (.))
+import Control.Lens(Optic', Choice, Fold, prism', (^?), ( # ))
 import Control.Monad(Monad)
+import Data.Char(Char)
 import Data.Eq(Eq)
 import Data.Foscam.File.DeviceIdCharacter
 import Data.Functor(fmap)
@@ -21,7 +24,6 @@ import Data.String(String)
 import Text.Parser.Char(CharParsing)
 import Text.Parser.Combinators((<?>))
 import Prelude(Show)
-
 
 -- $setup
 -- >>> import Text.Parsec
@@ -50,6 +52,10 @@ instance AsDeviceId p f DeviceId where
   _DeviceId =
     id
 
+instance (p ~ (->), Applicative f) => AsDeviceIdCharacter p f DeviceId where
+  _DeviceIdCharacter f (DeviceId d01 d02 d03 d04 d05 d06 d07 d08 d09 d10 d11 d12) =
+    DeviceId <$> f d01 <*> f d02 <*> f d03 <*> f d04 <*> f d05 <*> f d06 <*> f d07 <*> f d08 <*> f d09 <*> f d10 <*> f d11 <*> f d12
+
 instance (Choice p, Applicative f) => AsDeviceId p f String where
   _DeviceId =
     prism'
@@ -72,6 +78,12 @@ instance (Choice p, Applicative f) => AsDeviceId p f String where
                       f c12
                _ ->
                  Nothing)
+
+getDeviceIdCharacters :: 
+  Fold DeviceId Char
+getDeviceIdCharacters =
+  _DeviceIdCharacter . getDeviceIdCharacter
+
 
 -- |
 --

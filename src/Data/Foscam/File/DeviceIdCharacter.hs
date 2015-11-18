@@ -1,16 +1,18 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE GADTs #-}
 
 module Data.Foscam.File.DeviceIdCharacter(
   DeviceIdCharacter
 , AsDeviceIdCharacter(..)
 , deviceIdCharacter
+, getDeviceIdCharacter
 ) where
 
 import Control.Applicative(Applicative(pure))
 import Control.Category(id, (.))
-import Control.Lens(Optic', Choice, prism')
+import Control.Lens(Optic', Choice, Getter, prism', re)
 import Control.Monad(Monad(fail))
 import Data.Char(Char)
 import Data.Eq(Eq)
@@ -18,10 +20,11 @@ import Data.Functor(fmap)
 import Data.Foscam.File.Internal(boolj, charP)
 import Data.List(elem, (++))
 import Data.Ord(Ord)
+import Data.String(String)
+import Data.Traversable(traverse)
 import Text.Parser.Char(CharParsing)
 import Text.Parser.Combinators((<?>))
 import Prelude(Show)
-
 
 -- $setup
 -- >>> import Text.Parsec
@@ -43,6 +46,15 @@ instance (Choice p, Applicative f) => AsDeviceIdCharacter p f Char where
     prism'
       (\(DeviceIdCharacter c) -> c)
       (fmap DeviceIdCharacter . boolj (`elem` (['A'..'F'] ++ ['0'..'9'])))
+
+instance (p ~ (->), Applicative f) => AsDeviceIdCharacter p f String where
+  _DeviceIdCharacter =
+    traverse . _DeviceIdCharacter
+
+getDeviceIdCharacter ::
+  Getter DeviceIdCharacter Char
+getDeviceIdCharacter =
+  re _DeviceIdCharacter
 
 -- |
 --
