@@ -80,35 +80,35 @@ instance (p ~ (->), Functor f) => AsImageId p f Filename where
 
 -- |
 --
--- >>> parse Filename "test" "00626E44C831(house)_1_20150209134121_2629.jpg"
+-- >>> parse filename "test" "00626E44C831(house)_1_20150209134121_2629.jpg"
 -- Right (Filename (DeviceId (DeviceIdCharacter '0') (DeviceIdCharacter '0') (DeviceIdCharacter '6') (DeviceIdCharacter '2') (DeviceIdCharacter '6') (DeviceIdCharacter 'E') (DeviceIdCharacter '4') (DeviceIdCharacter '4') (DeviceIdCharacter 'C') (DeviceIdCharacter '8') (DeviceIdCharacter '3') (DeviceIdCharacter '1')) (Alias (AliasCharacter 'h') [AliasCharacter 'o',AliasCharacter 'u',AliasCharacter 's',AliasCharacter 'e']) 1 (Date 2 0 1 5 0 2 0 9) (Time 1 3 4 1 2 1) (ImageId 2 [6,2,9]))
 --
--- >>> parse Filename "test" "00626E44C829(garage)_1_20140313234556_2660.jpg"
+-- >>> parse filename "test" "00626E44C829(garage)_1_20140313234556_2660.jpg"
 -- Right (Filename (DeviceId (DeviceIdCharacter '0') (DeviceIdCharacter '0') (DeviceIdCharacter '6') (DeviceIdCharacter '2') (DeviceIdCharacter '6') (DeviceIdCharacter 'E') (DeviceIdCharacter '4') (DeviceIdCharacter '4') (DeviceIdCharacter 'C') (DeviceIdCharacter '8') (DeviceIdCharacter '2') (DeviceIdCharacter '9')) (Alias (AliasCharacter 'g') [AliasCharacter 'a',AliasCharacter 'r',AliasCharacter 'a',AliasCharacter 'g',AliasCharacter 'e']) 1 (Date 2 0 1 4 0 3 1 3) (Time 2 3 4 5 5 6) (ImageId 2 [6,6,0]))
 --
--- >>> parse Filename "test" "00626E44C82x(garage)_1_20140313234556_2660.jpg"
+-- >>> parse filename "test" "00626E44C82x(garage)_1_20140313234556_2660.jpg"
 -- Left "test" (line 1, column 13):
 -- not a device ID character: x
 --
--- >>> parse Filename "test" "00626E44C829(gara*ge)_1_20140313234556_2660.jpg"
+-- >>> parse filename "test" "00626E44C829(gara*ge)_1_20140313234556_2660.jpg"
 -- Left "test" (line 1, column 19):
 -- not an alias character: *
 --
--- >>> parse Filename "test" "00626E44C829(garage) 1_20140313234556_2660.jpg"
+-- >>> parse filename "test" "00626E44C829(garage) 1_20140313234556_2660.jpg"
 -- Left "test" (line 1, column 20):
 -- unexpected " "
 -- expecting ")_"
 --
--- >>> parse Filename "test" "00626E44C829(garage)_x_20140313234556_2660.jpg"
+-- >>> parse filename "test" "00626E44C829(garage)_x_20140313234556_2660.jpg"
 -- Left "test" (line 1, column 23):
 -- not a digit: x
 --
--- >>> parse Filename "test" "00626E44C829(garage)_1 20140313234556_2660.jpg"
+-- >>> parse filename "test" "00626E44C829(garage)_1 20140313234556_2660.jpg"
 -- Left "test" (line 1, column 23):
 -- unexpected " "
 -- expecting "_"
 --
--- >>> parse Filename "test" "00626E44C829(garage)_1_x0140313234556_2660.jpg"
+-- >>> parse filename "test" "00626E44C829(garage)_1_x0140313234556_2660.jpg"
 -- Left "test" (line 1, column 25):
 -- not a digit: x
 filename ::
