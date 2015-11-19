@@ -6,3 +6,7 @@
 
 * Add folds, getters, traversals.
 
+0.0.4
+
+* Add `getFilename` function.
+

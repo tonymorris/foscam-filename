@@ -7,13 +7,14 @@ module Data.Foscam.File.Filename(
   Filename(..)
 , AsFilename(..)
 , filename
+, getFilename
 ) where
 
 import Control.Applicative(Applicative((<*>)), (<*), (<$>))
 import Control.Category(id)
-import Control.Lens(Optic', lens)
+import Control.Lens(Optic', lens, ( # ))
 import Control.Monad(Monad)
-import Data.Digit(Digit)
+import Data.Digit(Digit, digitC)
 import Data.Eq(Eq)
 import Data.Foscam.File.Internal(digitCharacter)
 import Data.Foscam.File.Alias(AsAlias(_Alias), Alias, alias)
@@ -22,7 +23,9 @@ import Data.Foscam.File.DeviceId(AsDeviceId(_DeviceId), DeviceId, deviceId)
 import Data.Foscam.File.ImageId(AsImageId(_ImageId), ImageId, imageId)
 import Data.Foscam.File.Time(AsTime(_Time), Time, time)
 import Data.Functor(Functor)
+import Data.List((++))
 import Data.Ord(Ord)
+import Data.String(String)
 import Text.Parser.Char(CharParsing, char, string)
 import Text.Parser.Combinators((<?>))
 import Prelude(Show)
@@ -127,3 +130,9 @@ filename =
     char '_' <*>
     imageId <*
     string ".jpg" <?> "file"
+
+getFilename ::
+  Filename
+  -> String
+getFilename (Filename i a x d t m) =
+  _DeviceId # i ++ '(' : _Alias # a ++ ")_" ++ [digitC # x, '_'] ++ _Date # d ++ _Time # t ++ '_' : _ImageId # m ++ ".jpg"
